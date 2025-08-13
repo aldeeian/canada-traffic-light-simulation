@@ -1,39 +1,32 @@
 @echo off
-REM Traffic Light Simulation Test Build Script for Windows
+REM === Canada Traffic Light Simulation - Build Tests (Windows) ===
 
-echo Building and running tests...
+setlocal enableextensions enabledelayedexpansion
 
-REM Create build directory if it doesn't exist
 if not exist build mkdir build
 
-REM Compile traffic light tests
-echo Compiling traffic light tests...
-gcc -Wall -Wextra -std=c99 -Iinclude -Isrc -o build\test_traffic_light.exe tests\test_traffic_light.c src\traffic_light.c src\utils.c
+echo [1/2] Building test_traffic_light.exe ...
+gcc -Wall -Wextra -std=c99 -Iinclude -Isrc ^
+  -o build\test_traffic_light.exe ^
+  tests\test_traffic_light.c src\traffic_light.c src\utils.c
 
-if %ERRORLEVEL% EQU 0 (
-    echo Running traffic light tests...
-    build\test_traffic_light.exe
-) else (
-    echo Traffic light test compilation failed!
-    goto :end
+if %ERRORLEVEL% NEQ 0 (
+  echo Build of test_traffic_light.exe failed.
+  exit /b 1
+)
+
+echo [2/2] Building test_simulation.exe ...
+gcc -Wall -Wextra -std=c99 -Iinclude -Isrc ^
+  -o build\test_simulation.exe ^
+  tests\test_simulation.c src\traffic_light.c src\simulation.c src\utils.c
+
+if %ERRORLEVEL% NEQ 0 (
+  echo Build of test_simulation.exe failed.
+  exit /b 1
 )
 
 echo.
-
-REM Compile simulation tests  
-echo Compiling simulation tests...
-gcc -Wall -Wextra -std=c99 -Iinclude -Isrc -o build\test_simulation.exe tests\test_simulation.c src\traffic_light.c src\simulation.c src\utils.c
-
-if %ERRORLEVEL% EQU 0 (
-    echo Running simulation tests...
-    build\test_simulation.exe
-) else (
-    echo Simulation test compilation failed!
-    goto :end
-)
-
-echo.
-echo All tests completed!
-
-:end
-pause
+echo Tests built:
+echo   build\test_traffic_light.exe
+echo   build\test_simulation.exe
+endlocal
