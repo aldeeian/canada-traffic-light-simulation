@@ -1,6 +1,6 @@
 // FILE STRUCTURE : 
 
-// usa-traffic-light-simulation/
+// canada-traffic-light-simulation/
 // │
 // ├── src/
 // │   ├── main.c
